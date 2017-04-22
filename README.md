@@ -1,5 +1,6 @@
 # Ryal Core
 
+[![Build Status](https://travis-ci.org/ryal/ryal_core.svg?branch=master)](https://travis-ci.org/ryal/ryal_core)
 [![Hex.pm](https://img.shields.io/hexpm/v/ryal_core.svg)](https://hexdocs.pm/ryal_core/)
 
 The core of Ryal; probably already guessed that...
