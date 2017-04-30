@@ -14,10 +14,10 @@ defmodule Ryal do
   @user_module get_env(:ryal_core, :user_module)
   @user_table get_env(:ryal_core, :user_table)
 
-  def payment_gateways, do: @payment_gateways
+  def payment_gateways, do: @payment_gateways || %{}
   def default_payment_gateway, do: @default_payment_gateway
   def fallback_gateways do
-    Map.keys(payment_gateways() || %{}) -- [default_payment_gateway()]
+    Map.keys(payment_gateways()) -- [@default_payment_gateway]
   end
 
   def repo, do: @repo
