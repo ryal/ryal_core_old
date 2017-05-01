@@ -6,7 +6,7 @@ defmodule Dummy.Mixfile do
   def project do
     [
       app: :dummy,
-      elixirc_paths: ["lib", "web"],
+      elixirc_paths: ["lib"],
       config_path: "config/config.exs",
       version: "1.0.0",
       build_embedded: false,
@@ -14,7 +14,7 @@ defmodule Dummy.Mixfile do
       compilers: [:phoenix] ++ Mix.compilers(),
       deps: [
         {:postgrex, ">= 0.0.0"},
-        {:phoenix, "~> 1.2.1"},
+        {:phoenix, "~> 1.2"},
         {:phoenix_ecto, "~> 3.2.1"},
         {:ja_serializer, "~> 0.12.0"},
         {:scrivener_ecto, "~> 1.1"}

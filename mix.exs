@@ -60,7 +60,7 @@ defmodule Ryal.Core.Mixfile do
     [
       {:ecto, "~> 2.1"},
       {:ja_serializer, "~> 0.12"},
-      {:phoenix, "~> 1.2.1"},
+      {:phoenix, "~> 1.2"},
       {:phoenix_ecto, "~> 3.2.1"},
       {:postgrex, ">= 0.13.0"},
       {:scrivener_ecto, "~> 1.1"},
