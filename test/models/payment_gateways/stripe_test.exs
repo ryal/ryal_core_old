@@ -56,7 +56,7 @@ defmodule Ryal.PaymentGateway.StripeTest do
               cvc: "123"
             }
           })
-        |> Ryal.repo.insert!
+        |> Repo.insert!
 
       result = Stripe.create(:credit_card, credit_card, bypass_endpoint(bypass))
       assert {:ok, "card_1AA3En2BZSQJcNSQ77orWzVS"} == result
@@ -72,7 +72,7 @@ defmodule Ryal.PaymentGateway.StripeTest do
       gateway = %PaymentGateway{}
         |> PaymentGateway.changeset(%{type: "stripe", external_id: "cus_123", user_id: user.id})
         |> Repo.insert!
-        |> Ryal.repo.preload(:user)
+        |> Repo.preload(:user)
 
       Bypass.expect bypass, fn(conn) ->
         assert "/v1/customers/cus_123" == conn.request_path
@@ -95,7 +95,7 @@ defmodule Ryal.PaymentGateway.StripeTest do
       gateway = %PaymentGateway{}
         |> PaymentGateway.changeset(%{type: "stripe", external_id: "cus_123", user_id: user.id})
         |> Repo.insert!
-        |> Ryal.repo.preload(:user)
+        |> Repo.preload(:user)
 
       Bypass.expect bypass, fn(conn) ->
         assert "/v1/customers/cus_123" == conn.request_path

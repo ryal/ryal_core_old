@@ -8,6 +8,8 @@ defmodule Ryal.Order do
 
   use Ryal.Web, :model
 
+  alias Ryal.Core
+
   schema "ryal_orders" do
     field :number, :string
     field :state, :string, default: "cart"
@@ -15,7 +17,7 @@ defmodule Ryal.Order do
 
     has_many :payments, Ryal.Payment
 
-    belongs_to :user, Ryal.user_module()
+    belongs_to :user, Core.user_module()
 
     timestamps()
   end

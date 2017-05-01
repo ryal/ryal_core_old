@@ -16,9 +16,9 @@ defmodule Ryal.PaymentGatewayCommandTest do
 
   describe ".create/1" do
     test "will create a new bogus customer", %{user: user} do
-      assert [] == Ryal.repo.all(PaymentGateway)
+      assert [] == Repo.all(PaymentGateway)
       assert PaymentGatewayCommand.create(:bogus, user)
-      assert Ryal.repo.one!(PaymentGateway)
+      assert Repo.one!(PaymentGateway)
     end
   end
 

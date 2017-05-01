@@ -4,6 +4,7 @@ defmodule Mix.Tasks.Ryal.Core.Install do
   use Mix.Task
 
   alias Mix.Ecto
+  alias Ryal.Core
 
   def run(_) do
     File.mkdir_p project_migration_dir()
@@ -43,7 +44,7 @@ defmodule Mix.Tasks.Ryal.Core.Install do
   defp pad(i), do: to_string(i)
 
   defp project_migration_dir do
-    dir = Ecto.migrations_path Ryal.repo()
+    dir = Ecto.migrations_path Core.repo()
     marketplace? = Application.get_env(:ryal_core, :marketplace)
     if marketplace?, do: marketplace_migrations_folder(dir), else: dir
   end
