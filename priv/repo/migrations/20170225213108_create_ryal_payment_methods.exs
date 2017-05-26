@@ -6,7 +6,7 @@ defmodule Ryal.Repo.Migrations.CreateRyalPaymentMethods do
       add :type, :string, null: false
       add :proxy, :map, null: false
 
-      add :user_id, references(Ryal.user_table()), null: false
+      add :user_id, references(Ryal.Core.user_table()), null: false
 
       timestamps()
     end

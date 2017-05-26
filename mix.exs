@@ -40,7 +40,7 @@ defmodule Ryal.Core.Mixfile do
 
   def application do
     [
-      mod: {Ryal, []},
+      mod: {Ryal.Core, []},
       applications: applications() ++ applications(Mix.env)
     ]
   end

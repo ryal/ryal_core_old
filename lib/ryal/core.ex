@@ -1,4 +1,4 @@
-defmodule Ryal do
+defmodule Ryal.Core do
   @moduledoc """
   The core Ryal namespace. This guy is primarily used for configuration.
   """

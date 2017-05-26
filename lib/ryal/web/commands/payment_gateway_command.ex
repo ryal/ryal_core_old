@@ -4,17 +4,18 @@ defmodule Ryal.PaymentGatewayCommand do
   `external_id`s from payment gateways.
   """
 
+  alias Ryal.Core
   alias Ryal.PaymentGateway
 
   @doc "Shorthand for creating all the payment gateways relevant to a user."
   @spec create(Ecto.Schema.t) ::
      {:ok, Ecto.Schema.t} | {:error, Ecto.Changeset.t}
   def create(user) do
-    Enum.each Ryal.fallback_gateways() || [], fn(gateway_type) ->
+    Enum.each Core.fallback_gateways() || [], fn(gateway_type) ->
       spawn_monitor fn -> create(gateway_type, user) end
     end
 
-    create Ryal.default_payment_gateway(), user
+    create Core.default_payment_gateway(), user
   end
 
   @doc """
@@ -29,7 +30,7 @@ defmodule Ryal.PaymentGatewayCommand do
     with {:ok, external_id} <- payment_gateway(type).create(:customer, user),
          changeset <-
            PaymentGateway.changeset(%{struct | external_id: external_id}),
-      do: Ryal.repo.insert(changeset)
+      do: Core.repo.insert(changeset)
   end
 
   @doc """
@@ -47,7 +48,7 @@ defmodule Ryal.PaymentGatewayCommand do
   def delete(user), do: update_payment_gateways(user, :delete)
 
   defp update_payment_gateways(user, action) do
-    user = Ryal.repo.preload(user, :payment_gateways)
+    user = Core.repo.preload(user, :payment_gateways)
 
     Enum.map user.payment_gateways, fn(payment_gateway) ->
       type = String.to_atom payment_gateway.type

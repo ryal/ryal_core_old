@@ -22,4 +22,4 @@ install:
 before_script:
   - mix db.reset
 script:
-  - mix coveralls.travis
+  - mix test

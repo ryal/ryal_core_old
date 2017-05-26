@@ -8,6 +8,7 @@ defmodule Ryal.JsonRenderPlug do
   alias Ecto.Queryable
   alias Phoenix.Controller
   alias Plug.Conn
+  alias Ryal.Core
   alias Ryal.JsonApiQuery
 
   def render_collection(conn, params, collection) do
@@ -19,7 +20,7 @@ defmodule Ryal.JsonRenderPlug do
       |> Map.put(:prefix, prefix)
       |> JsonApiQuery.filter(params["filter"], Controller.view_module(conn))
       |> JsonApiQuery.sort(params["sort"], Controller.view_module(conn))
-      |> Ryal.repo.paginate(params["page"])
+      |> Core.repo.paginate(params["page"])
 
     Controller.render conn, data: data, opts: [
       fields: params["fields"],

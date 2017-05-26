@@ -4,6 +4,7 @@ defmodule Ryal.UserCommand do
   state of users on payment gateway platforms.
   """
 
+  alias Ryal.Core
   alias Ryal.PaymentGatewayCommand
 
   @doc """
@@ -12,7 +13,7 @@ defmodule Ryal.UserCommand do
   """
   @spec create(Ecto.Changeset.t) :: {:ok, Ecto.Schema.t}
   def create(changeset) do
-    with {:ok, user} <- Ryal.repo.insert(changeset),
+    with {:ok, user} <- Core.repo.insert(changeset),
          {:ok, _default_payment_gateway} <- PaymentGatewayCommand.create(user),
       do: {:ok, user}
   end
@@ -23,7 +24,7 @@ defmodule Ryal.UserCommand do
   """
   @spec update(Ecto.Changeset.t) :: {:ok, Ecto.Schema.t}
   def update(changeset) do
-    with {:ok, user} <- Ryal.repo.update(changeset),
+    with {:ok, user} <- Core.repo.update(changeset),
          [_] <- PaymentGatewayCommand.update(user),
       do: {:ok, user}
   end
@@ -35,6 +36,6 @@ defmodule Ryal.UserCommand do
   @spec delete(Ecto.Schema.t) :: {:ok, Ecto.Schema.t}
   def delete(user) do
     with [_] <- PaymentGatewayCommand.delete(user),
-      do: Ryal.repo.delete(user)
+      do: Core.repo.delete(user)
   end
 end

@@ -7,13 +7,15 @@ defmodule Ryal.PaymentGateway do
 
   use Ryal.Web, :model
 
+  alias Ryal.Core
+
   schema "ryal_payment_gateways" do
     field :type, :string
     field :external_id, :string
 
     has_many :payment_method_gateways, Ryal.PaymentMethodGateway
 
-    belongs_to :user, Ryal.user_module()
+    belongs_to :user, Core.user_module()
 
     timestamps()
   end
