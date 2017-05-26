@@ -18,10 +18,5 @@ defmodule Ryal.PaymentMethodTest do
       changeset = PaymentMethod.changeset(%PaymentMethod{}, %{})
       refute changeset.valid?
     end
-
-    test "isn't susceptible to h4ck1ng" do
-      changeset = PaymentMethod.changeset(%PaymentMethod{}, %{type: "proxy"})
-      assert {"is invalid", [validation: :inclusion]} == changeset.errors[:type]
-    end
   end
 end
