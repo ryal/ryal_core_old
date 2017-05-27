@@ -14,7 +14,7 @@ defmodule Ryal.PaymentMethod do
 
       iex> Ryal.PaymentMethod.changeset(%Ryal.PaymentMethod{}, %{
         type: "credit_card",
-        data: %{
+        proxy: %{
           name: "Bobby Orr",
           number: "4242 4242 4242 4242",
           month: "03",
