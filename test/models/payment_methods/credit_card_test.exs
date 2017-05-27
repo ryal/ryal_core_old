@@ -23,17 +23,19 @@ defmodule Ryal.PaymentMethod.CreditCardTest do
     test "will create a new credit card changeset", %{attrs: params} do
       changeset = CreditCard.changeset(%CreditCard{}, params)
 
-      assert changeset.changes.number == "4242424242424242"
+      assert Map.fetch(changeset.changes, :number) == :error
+      assert Map.fetch(changeset.changes, :cvc) == :error
       assert changeset.changes.last_digits == "4242"
       assert changeset.valid?
     end
 
     test "can use numbers with tabs", %{attrs: params} do
       params = %{params | number: "4242 4242  4242  4242"}
-      changeset = CreditCard.changeset(%CreditCard{}, params)
+      changeset = %CreditCard{}
+        |> Ecto.Changeset.cast(params, Map.keys(params))
+        |> CreditCard.format_number
 
       assert changeset.changes.number == "4242424242424242"
-      assert changeset.changes.last_digits == "4242"
       assert changeset.valid?
     end
 
@@ -45,10 +47,12 @@ defmodule Ryal.PaymentMethod.CreditCardTest do
         4242
         """
       }
-      changeset = CreditCard.changeset(%CreditCard{}, params)
+
+      changeset = %CreditCard{}
+        |> Ecto.Changeset.cast(params, Map.keys(params))
+        |> CreditCard.format_number
 
       assert changeset.changes.number == "4242424242424242"
-      assert changeset.changes.last_digits == "4242"
       assert changeset.valid?
     end
   end
