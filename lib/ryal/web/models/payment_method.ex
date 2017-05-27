@@ -14,7 +14,8 @@ defmodule Ryal.PaymentMethod do
 
       iex> Ryal.PaymentMethod.changeset(%Ryal.PaymentMethod{}, %{
         type: "credit_card",
-        data: %{
+        user_id: 1,
+        proxy: %{
           name: "Bobby Orr",
           number: "4242 4242 4242 4242",
           month: "03",
@@ -63,6 +64,8 @@ defmodule Ryal.PaymentMethod do
     |> cast_embed(:proxy, required: true)
   end
 
+  # Loads up the module for the payment method type and then applies it to the
+  # proxy column. This struct carries the module name and the data carried over.
   defp set_module_type(%{type: type} = params) do
     type = String.to_atom type
     proxy_data = Map.get(params, :proxy, %{})

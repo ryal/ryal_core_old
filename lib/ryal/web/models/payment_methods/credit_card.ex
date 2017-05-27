@@ -15,18 +15,20 @@ defmodule Ryal.PaymentMethod.CreditCard do
 
   use Ecto.Schema
 
-  import Ecto.Changeset, only: [cast: 3, validate_required: 2, put_change: 3]
+  import Ecto.Changeset, only: [
+    cast: 3, validate_required: 2, put_change: 3, delete_change: 2
+  ]
 
   embedded_schema do
     field :name, :string
 
     field :last_digits, :string
-    field :number, :string, virtual: true
+    field :number, :string
 
     field :month, :string
     field :year, :string
 
-    field :cvc, :string, virtual: true
+    field :cvc, :string
   end
 
   @required_fields ~w(name number month year cvc)a
@@ -40,18 +42,26 @@ defmodule Ryal.PaymentMethod.CreditCard do
     struct
     |> cast(params, @required_fields)
     |> validate_required(@required_fields)
+    |> format_number
     |> cast_number_to_last_digits
     |> validate_required([:last_digits])
+    |> delete_change(:number)
+    |> delete_change(:cvc)
+  end
+
+  def format_number(changeset) do
+    if Map.has_key?(changeset.changes, :number) do
+      number = Regex.replace(~r/[[:space:]]/, changeset.changes.number, "")
+      put_change(changeset, :number, number)
+    else
+      changeset
+    end
   end
 
   defp cast_number_to_last_digits(changeset) do
     if Map.has_key?(changeset.changes, :number) do
-      number = Regex.replace(~r/[[:space:]]/, changeset.changes.number, "")
-      {_, digits} = String.split_at(number, -4)
-
-      changeset
-      |> put_change(:number, number)
-      |> put_change(:last_digits, digits)
+      {_, digits} = String.split_at(changeset.changes.number, -4)
+      put_change(changeset, :last_digits, digits)
     else
       changeset
     end

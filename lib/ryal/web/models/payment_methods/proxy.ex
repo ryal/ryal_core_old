@@ -43,8 +43,12 @@ defmodule Ryal.PaymentMethod.Proxy do
       |> struct(%{})
       |> module.changeset(params)
 
+    data = proxy_changeset
+      |> Ecto.Changeset.apply_changes
+      |> Map.from_struct
+
     %__MODULE__{}
-    |> cast(%{data: params}, [:data])
+    |> cast(%{data: data}, [:data])
     |> Map.merge(%{
       errors: proxy_changeset.errors,
       valid?: proxy_changeset.valid?
