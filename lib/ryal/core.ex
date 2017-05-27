@@ -7,7 +7,6 @@ defmodule Ryal.Core do
 
   import Application, only: [get_env: 2]
 
-  @payment_gateways get_env(:ryal_core, :payment_gateways)
   @default_payment_gateway get_env(:ryal_core, :default_payment_gateway)
 
   @payment_methods get_env(:ryal_core, :payment_methods)
@@ -19,7 +18,7 @@ defmodule Ryal.Core do
   @user_module get_env(:ryal_core, :user_module)
   @user_table get_env(:ryal_core, :user_table)
 
-  def payment_gateways, do: @payment_gateways || %{}
+  def payment_gateways, do: get_env(:ryal_core, :payment_gateways) || %{}
   def default_payment_gateway, do: @default_payment_gateway
 
   def fallback_gateways do
