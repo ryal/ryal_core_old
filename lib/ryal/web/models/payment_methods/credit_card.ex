@@ -21,12 +21,12 @@ defmodule Ryal.PaymentMethod.CreditCard do
     field :name, :string
 
     field :last_digits, :string
-    field :number, :string, virtual: true
+    field :number, :string
 
     field :month, :string
     field :year, :string
 
-    field :cvc, :string, virtual: true
+    field :cvc, :string
   end
 
   @required_fields ~w(name number month year cvc)a
