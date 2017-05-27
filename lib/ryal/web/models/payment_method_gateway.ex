@@ -12,5 +12,16 @@ defmodule Ryal.PaymentMethodGateway do
 
     belongs_to :payment_gateway, Ryal.PaymentGateway
     belongs_to :payment_method, Ryal.PaymentMethod
+
+    timestamps()
+  end
+
+  @required_fields ~w(payment_method_id payment_gateway_id)a
+
+  def changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, @required_fields)
+    |> cast_assoc(:payment_gateway)
+    |> cast_assoc(:payment_method)
   end
 end
