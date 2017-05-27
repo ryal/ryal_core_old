@@ -49,7 +49,6 @@ defmodule Ryal.PaymentMethod do
   end
 
   @required_fields ~w(type user_id)a
-  @payment_method_types ~w(credit_card)
 
   @doc """
   You hand us some `data` and a `type` and we associate a payment method to a
@@ -61,16 +60,15 @@ defmodule Ryal.PaymentMethod do
     struct
     |> cast(set_module_type(params), @required_fields)
     |> validate_required(@required_fields)
-    |> validate_inclusion(:type, @payment_method_types)
     |> cast_embed(:proxy, required: true)
   end
 
-  defp set_module_type(%{type: type} = params)
-      when type in @payment_method_types do
-    module_type = Macro.camelize(type)
-    {module_name, []} = Code.eval_string("Ryal.PaymentMethod.#{module_type}")
+  defp set_module_type(%{type: type} = params) do
+    type = String.to_atom type
     proxy_data = Map.get(params, :proxy, %{})
-    Map.put(params, :proxy, struct(module_name, proxy_data))
+
+    with {:ok, module_name} <- Core.payment_method(type),
+      do: Map.put(params, :proxy, struct(module_name, proxy_data))
   end
 
   defp set_module_type(params), do: params
