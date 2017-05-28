@@ -108,7 +108,4 @@ defmodule Ryal.PaymentGateway.StripeTest do
       assert {:ok, _response} = result
     end
   end
-
-  defp bypass_endpoint(bypass), do: "http://localhost:#{bypass.port}"
-  defp read_fixture(fixture), do: File.read!("test/fixtures/#{fixture}")
 end
