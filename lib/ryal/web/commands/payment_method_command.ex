@@ -56,15 +56,16 @@ defmodule Ryal.PaymentMethodCommand do
     end)
   end
 
+  defp create_payment_method_gateway(payment_gateway, _payment_method, _payment_method_data)
+      when is_nil(payment_gateway), do: nil
+
   defp create_payment_method_gateway(payment_gateway, payment_method, payment_method_data) do
-    if payment_gateway do
-      %PaymentMethodGateway{}
-      |> PaymentMethodGateway.changeset(%{
-        payment_method_id: payment_method.id,
-        payment_gateway_id: payment_gateway.id
-      })
-      |> PaymentMethodGatewayCommand.create(payment_method_data)
-    end
+    %PaymentMethodGateway{}
+    |> PaymentMethodGateway.changeset(%{
+      payment_method_id: payment_method.id,
+      payment_gateway_id: payment_gateway.id
+    })
+    |> PaymentMethodGatewayCommand.create(payment_method_data)
   end
 
   defp default_payment_gateway?(payment_gateway) do
