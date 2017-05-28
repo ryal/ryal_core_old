@@ -1,6 +1,8 @@
 defmodule Ryal.PaymentMethodCommand do
-  alias Ryal.{Core, PaymentMethodGateway, PaymentMethodGatewayCommand}
 
+  alias Ryal.{
+    Core, PaymentMethodGateway, PaymentMethodGatewayCommand, PaymentMethodQuery
+  }
   def create(changeset, payment_method_data) do
     with {:ok, payment_method} <- Core.repo.insert(changeset),
          payment_gateways <- query_payment_gateways(payment_method),
@@ -13,7 +15,7 @@ defmodule Ryal.PaymentMethodCommand do
 
   defp query_payment_gateways(payment_method) do
     payment_method
-    |> Ecto.assoc([:user, :payment_gateways])
+    |> PaymentMethodQuery.users_payment_gateways
     |> Core.repo.all
   end
 
