@@ -28,6 +28,7 @@ defmodule Ryal.Order do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_fields ++ @optional_fields)
+    |> cast_assoc(:user)
     |> generate_number
     |> validate_required(@required_fields)
     |> unique_constraint(:number)

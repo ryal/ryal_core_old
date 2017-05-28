@@ -27,6 +27,7 @@ defmodule Ryal.PaymentTransition do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_fields)
+    |> cast_assoc(:payment)
     |> validate_required(@required_fields)
   end
 end

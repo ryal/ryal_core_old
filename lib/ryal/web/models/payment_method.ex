@@ -60,6 +60,7 @@ defmodule Ryal.PaymentMethod do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(set_module_type(params), @required_fields)
+    |> cast_assoc(:user)
     |> validate_required(@required_fields)
     |> cast_embed(:proxy, required: true)
   end
