@@ -34,7 +34,7 @@ defmodule Ryal.Core do
   end
 
   def payment_gateway_module(type) do
-    Map.fetch payment_gateway_modules(), type
+    Map.get payment_gateway_modules(), type
   end
 
   def fallback_gateways do

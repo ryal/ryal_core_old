@@ -56,13 +56,5 @@ defmodule Ryal.PaymentGatewayCommand do
     end
   end
 
-  defp payment_gateway(type) do
-    module_type = type
-      |> Atom.to_string
-      |> Macro.camelize
-
-    {module, []} = Code.eval_string("Ryal.PaymentGateway.#{module_type}")
-
-    module
-  end
+  defp payment_gateway(type), do: Core.payment_gateway_module(type)
 end
