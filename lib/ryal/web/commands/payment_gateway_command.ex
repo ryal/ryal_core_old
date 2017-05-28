@@ -4,8 +4,7 @@ defmodule Ryal.PaymentGatewayCommand do
   `external_id`s from payment gateways.
   """
 
-  alias Ryal.Core
-  alias Ryal.PaymentGateway
+  alias Ryal.{Core, PaymentGateway}
 
   @doc "Shorthand for creating all the payment gateways relevant to a user."
   @spec create(Ecto.Schema.t) ::
@@ -24,10 +23,16 @@ defmodule Ryal.PaymentGatewayCommand do
   """
   @spec create(atom, Ecto.Schema.t) ::
     {:ok, Ecto.Schema.t} | {:error, Ecto.Changeset.t}
-  def create(type, user) do
+  def create(type, user, endpoint \\ nil) do
     struct = %PaymentGateway{type: Atom.to_string(type), user_id: user.id}
 
-    with {:ok, external_id} <- payment_gateway(type).create(:customer, user),
+    customer = if endpoint do
+      payment_gateway(type).create(:customer, nil, user, endpoint)
+    else
+      payment_gateway(type).create(:customer, nil, user)
+    end
+
+    with {:ok, external_id} <- customer,
          changeset <-
            PaymentGateway.changeset(%{struct | external_id: external_id}),
       do: Core.repo.insert(changeset)
