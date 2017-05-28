@@ -69,9 +69,8 @@ defmodule Ryal.PaymentMethod do
   defp set_module_type(%{type: type} = params) do
     type = String.to_atom type
     proxy_data = Map.get(params, :proxy, %{})
-
-    with {:ok, module_name} <- Core.payment_method(type),
-      do: Map.put(params, :proxy, struct(module_name, proxy_data))
+    module_name = Core.payment_method(type)
+    Map.put(params, :proxy, struct(module_name, proxy_data))
   end
 
   defp set_module_type(params), do: params

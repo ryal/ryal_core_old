@@ -33,9 +33,7 @@ defmodule Ryal.Core do
     Map.merge(@default_payment_gateway_modules, @payment_gateway_modules || %{})
   end
 
-  def payment_gateway_module(type) do
-    Map.get payment_gateway_modules(), type
-  end
+  def payment_gateway_module(type), do: Map.get(payment_gateway_modules(), type)
 
   def fallback_gateways do
     Map.keys(payment_gateways()) -- [@default_payment_gateway]
@@ -45,7 +43,7 @@ defmodule Ryal.Core do
     Map.merge(@default_payment_methods, @payment_methods || %{})
   end
 
-  def payment_method(type), do: Map.fetch(payment_methods(), type)
+  def payment_method(type), do: Map.get(payment_methods(), type)
   def default_payment_methods, do: @default_payment_methods
 
   def repo, do: @repo
