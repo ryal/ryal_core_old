@@ -1,6 +1,15 @@
 defmodule Ryal.PaymentMethodGatewayCommand do
+  @moduledoc """
+  Here exists the CD of a payment method tied to a payment gateway. This does
+  heavy lifting for creating a payment method on a payment gateway.
+  """
+
   alias Ryal.{Core, PaymentGateway, PaymentMethod, PaymentMethodGateway}
 
+  @doc """
+  Creates a profile of the payment method and then creates a
+  `Ryal.PaymentMethodGateway`.
+  """
   def create(changeset, payment_method_data, endpoint \\ nil) do
     with payment_method <-
            Core.repo.get(PaymentMethod, changeset.changes.payment_method_id),
