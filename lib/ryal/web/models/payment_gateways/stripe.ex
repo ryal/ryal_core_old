@@ -1,7 +1,7 @@
 defmodule Ryal.PaymentGateway.Stripe do
   @moduledoc "Relevant functions for working with the Stipe API."
 
-  alias Ryal.{Core, PaymentGatewayQuery}
+  alias Ryal.Core
 
   @stripe_api_key Map.get(Core.payment_gateways(), :stripe)
   @stripe_base "https://#{@stripe_api_key}:@api.stripe.com"
