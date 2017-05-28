@@ -24,7 +24,7 @@ defmodule Ryal.PaymentMethodGateway do
     struct
     |> cast(params, @required_fields)
     |> validate_required(@required_fields)
-    |> cast_assoc(:payment_gateway)
-    |> cast_assoc(:payment_method)
+    |> assoc_constraint(:payment_gateway)
+    |> assoc_constraint(:payment_method)
   end
 end

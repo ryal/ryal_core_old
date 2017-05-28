@@ -22,12 +22,12 @@ defmodule Ryal.PaymentTransition do
     timestamps()
   end
 
-  @required_fields ~w(from to event result)
+  @required_fields ~w(from to event result payment_id)
 
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_fields)
-    |> cast_assoc(:payment)
+    |> assoc_constraint(:payment)
     |> validate_required(@required_fields)
   end
 end
