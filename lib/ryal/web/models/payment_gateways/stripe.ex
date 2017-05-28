@@ -1,26 +1,21 @@
 defmodule Ryal.PaymentGateway.Stripe do
   @moduledoc "Relevant functions for working with the Stipe API."
 
-  alias Ryal.Core
-  alias Ryal.PaymentGatewayQuery
+  alias Ryal.{Core, PaymentGatewayQuery}
 
   @stripe_api_key Map.get(Core.payment_gateways(), :stripe)
   @stripe_base "https://#{@stripe_api_key}:@api.stripe.com"
 
-  @spec create(atom, Ecto.Schema.t, String.t) :: {:ok, String.t}
-  def create(type, schema, stripe_base \\ @stripe_base)
+  @spec create(atom, String.t | nil, Ecto.Schema.t | Map.t, String.t) :: {:ok, String.t}
 
-  def create(:credit_card, payment_method, stripe_base) do
-    credit_card_data = payment_method.proxy.data
-    customer_id = payment_method.user_id
-      |> PaymentGatewayQuery.get_external_id("stripe")
-      |> Core.repo.one!
+  def create(type, customer_id, data, stripe_base \\ @stripe_base)
 
+  def create(:credit_card, customer_id, credit_card, stripe_base) do
     credit_card_path = "/v1/customers/#{customer_id}/sources"
-    create_object credit_card_data, :credit_card, credit_card_path, stripe_base
+    create_object credit_card, :credit_card, credit_card_path, stripe_base
   end
 
-  def create(:customer, user, stripe_base) do
+  def create(:customer, _customer_id, user, stripe_base) do
     create_object user, :customer, "/v1/customers", stripe_base
   end
 

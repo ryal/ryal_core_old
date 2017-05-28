@@ -1,31 +1,38 @@
 defmodule Ryal.PaymentMethodGatewayCommand do
-  alias Ryal.Core
+  alias Ryal.{Core, PaymentGateway, PaymentMethod, PaymentMethodGateway}
 
-  def create(changeset) do
-    with {:ok, payment_method_gateway} <- Core.repo.insert(changeset),
-         payment_method <- get_payment_method(payment_method_gateway),
-         payment_gateway <- get_payment_gateway(payment_method_gateway),
-      do: create_on_payment_gateway(payment_method, payment_gateway)
+  def create(changeset, payment_method_data, endpoint \\ nil) do
+    with payment_method <-
+           Core.repo.get(PaymentMethod, changeset.changes.payment_method_id),
+         payment_gateway <-
+           Core.repo.get(PaymentGateway, changeset.changes.payment_gateway_id),
+         {:ok, external_id} <-
+           create_on_payment_gateway(payment_method, payment_method_data, payment_gateway, endpoint),
+         changeset <- rebuild_changeset(changeset, external_id),
+      do: Core.repo.insert(changeset)
   end
 
-  defp get_payment_method(payment_method_gateway) do
-    payment_method_gateway
-    |> Ecto.assoc(:payment_method)
-    |> Core.repo.one
-  end
-
-  defp get_payment_gateway(payment_method_gateway) do
-    payment_method_gateway
-    |> Ecto.assoc(:payment_gateway)
-    |> Core.repo.one
-  end
-
-  defp create_on_payment_gateway(payment_method, payment_gateway) do
+  defp create_on_payment_gateway(payment_method, payment_method_data, payment_gateway, endpoint) do
     payment_method_type = String.to_atom(payment_method.type)
     payment_gateway_type = String.to_atom(payment_gateway.type)
+    payment_gateway_module = Core.payment_gateway_module(payment_gateway_type)
 
-    with {:ok, payment_gateway_module} <-
-           Core.payment_gateway_module(payment_gateway_type),
-      do: payment_gateway_module.create(payment_method_type, payment_method)
+    if endpoint do
+      payment_gateway_module.create(
+        payment_method_type, payment_gateway.external_id, payment_method_data,
+        endpoint
+      )
+    else
+      payment_gateway_module.create(
+        payment_method_type, payment_gateway.external_id, payment_method_data
+      )
+    end
+  end
+
+  defp rebuild_changeset(changeset, external_id) do
+    changeset
+    |> Ecto.Changeset.apply_changes
+    |> Map.merge(%{external_id: external_id})
+    |> PaymentMethodGateway.changeset
   end
 end
