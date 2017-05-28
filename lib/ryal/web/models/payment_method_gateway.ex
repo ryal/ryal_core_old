@@ -8,6 +8,8 @@ defmodule Ryal.PaymentMethodGateway do
   use Ryal.Web, :model
 
   schema "ryal_payment_method_gateways" do
+    field :external_id, :string
+
     has_many :payments, Ryal.Payment
 
     belongs_to :payment_gateway, Ryal.PaymentGateway
@@ -16,11 +18,12 @@ defmodule Ryal.PaymentMethodGateway do
     timestamps()
   end
 
-  @required_fields ~w(payment_method_id payment_gateway_id)a
+  @required_fields ~w(external_id payment_method_id payment_gateway_id)a
 
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_fields)
+    |> validate_required(@required_fields)
     |> cast_assoc(:payment_gateway)
     |> cast_assoc(:payment_method)
   end
