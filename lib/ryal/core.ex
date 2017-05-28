@@ -45,10 +45,7 @@ defmodule Ryal.Core do
     Map.merge(@default_payment_methods, @payment_methods || %{})
   end
 
-  def payment_method(type) do
-    Map.fetch payment_methods(), type
-  end
-
+  def payment_method(type), do: Map.fetch(payment_methods(), type)
   def default_payment_methods, do: @default_payment_methods
 
   def repo, do: @repo
