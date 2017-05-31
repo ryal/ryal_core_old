@@ -10,6 +10,8 @@ defmodule Ryal.PaymentGateway.Stripe do
 
   def create(type, customer_id, data, stripe_base \\ @stripe_base)
 
+  def create(type, customer_id, data, nil), do: create(type, customer_id, data)
+
   def create(:credit_card, customer_id, credit_card, stripe_base) do
     credit_card_path = "/v1/customers/#{customer_id}/sources"
     create_object credit_card, :credit_card, credit_card_path, stripe_base

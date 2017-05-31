@@ -26,13 +26,8 @@ defmodule Ryal.PaymentGatewayCommand do
   def create(type, user, endpoint \\ nil) do
     struct = %PaymentGateway{type: Atom.to_string(type), user_id: user.id}
 
-    customer = if endpoint do
-      payment_gateway(type).create(:customer, nil, user, endpoint)
-    else
-      payment_gateway(type).create(:customer, nil, user)
-    end
-
-    with {:ok, external_id} <- customer,
+    with {:ok, external_id} <-
+           payment_gateway(type).create(:customer, nil, user, endpoint),
          changeset <-
            PaymentGateway.changeset(%{struct | external_id: external_id}),
       do: Core.repo.insert(changeset)
