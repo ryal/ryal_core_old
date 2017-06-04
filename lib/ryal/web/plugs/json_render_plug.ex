@@ -33,25 +33,17 @@ defmodule Ryal.JsonRenderPlug do
     Controller.render conn, :show, data: instance, opts: opts
   end
 
-  def render_creation(conn, params, response) do
-    case response do
-      {:ok, result} ->
-        conn
-        |> Conn.put_status(201)
-        |> render_instance(params, result)
-      {:error, changeset} ->
-        conn
-        |> Conn.put_status(422)
-        |> Controller.render(:errors, data: changeset)
-    end
+  def render_creation(conn, params, {:ok, result}) do
+      conn
+      |> Conn.put_status(201)
+      |> render_instance(params, result)
+  end
+  def render_creation(conn, params, {:error, changeset}) do
+      conn
+      |> Conn.put_status(422)
+      |> Controller.render(:errors, data: changeset)
   end
 
-  def render_deletion(conn, _params, response) do
-    case response do
-      {:ok, _result} ->
-        Conn.send_resp(conn, 204, "")
-      {:error, _changeset} ->
-        Conn.send_resp(conn, 422, "")
-    end
-  end
+  def render_deletion(conn, _params, {:ok, _result}), do: Conn.send_resp(conn, 204, "")
+  def render_deletion(conn, _params, {:error, _changeset}), do: Conn.send_resp(conn, 422, "")
 end
