@@ -34,14 +34,15 @@ defmodule Ryal.JsonRenderPlug do
   end
 
   def render_creation(conn, params, {:ok, result}) do
-      conn
-      |> Conn.put_status(201)
-      |> render_instance(params, result)
+    conn
+    |> Conn.put_status(201)
+    |> render_instance(params, result)
   end
+
   def render_creation(conn, params, {:error, changeset}) do
-      conn
-      |> Conn.put_status(422)
-      |> Controller.render(:errors, data: changeset)
+    conn
+    |> Conn.put_status(422)
+    |> Controller.render(:errors, data: changeset)
   end
 
   def render_deletion(conn, _params, {:ok, _result}), do: Conn.send_resp(conn, 204, "")

@@ -49,21 +49,17 @@ defmodule Ryal.PaymentMethod.CreditCard do
     |> delete_change(:cvc)
   end
 
-  @doc """
-    Remove unnecessary whitespace from the card number
-  """
+  @doc "Remove unnecessary whitespace from the card number."
   def format_number(%{:changes => %{:number => number}} = changeset) do
-      number = Regex.replace(~r/[[:space:]]/, number, "")
-      put_change(changeset, :number, number)
+    number = Regex.replace(~r/[[:space:]]/, number, "")
+    put_change(changeset, :number, number)
   end
   def format_number(changeset), do: changeset
 
-  @doc """
-    Get the last 4 digits of the PAN (Primary Account Number)
-  """
+  @doc "Get the last 4 digits of the PAN (Primary Account Number)."
   defp cast_number_to_last_digits(%{:changes => %{:number => number}} = changeset) do
-      {_, digits} = String.split_at(number, -4)
-      put_change(changeset, :last_digits, digits)
+    {_, digits} = String.split_at(number, -4)
+    put_change(changeset, :last_digits, digits)
   end
   defp cast_number_to_last_digits(changeset), do: changeset
 end
