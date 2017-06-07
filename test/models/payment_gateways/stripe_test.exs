@@ -41,7 +41,9 @@ defmodule Ryal.PaymentGateway.StripeTest do
       end
 
       %PaymentGateway{}
-      |> PaymentGateway.changeset(%{type: "stripe", external_id: "cus_123", user_id: user.id})
+      |> PaymentGateway.changeset(%{
+          type: "stripe", external_id: "cus_123", user_id: user.id
+        })
       |> Repo.insert!
 
       credit_card_data = %{
@@ -60,7 +62,9 @@ defmodule Ryal.PaymentGateway.StripeTest do
         })
       |> Repo.insert!
 
-      result = Stripe.create(:credit_card, "cus_123", credit_card_data, bypass_endpoint(bypass))
+      result = Stripe.create(
+          :credit_card, "cus_123", credit_card_data, bypass_endpoint(bypass)
+        )
       assert {:ok, "card_1AA3En2BZSQJcNSQ77orWzVS"} == result
     end
   end
@@ -72,7 +76,9 @@ defmodule Ryal.PaymentGateway.StripeTest do
         |> Repo.insert!
 
       gateway = %PaymentGateway{}
-        |> PaymentGateway.changeset(%{type: "stripe", external_id: "cus_123", user_id: user.id})
+        |> PaymentGateway.changeset(%{
+            type: "stripe", external_id: "cus_123", user_id: user.id
+          })
         |> Repo.insert!
         |> Repo.preload(:user)
 
@@ -95,7 +101,9 @@ defmodule Ryal.PaymentGateway.StripeTest do
         |> Repo.insert!
 
       gateway = %PaymentGateway{}
-        |> PaymentGateway.changeset(%{type: "stripe", external_id: "cus_123", user_id: user.id})
+        |> PaymentGateway.changeset(%{
+            type: "stripe", external_id: "cus_123", user_id: user.id
+          })
         |> Repo.insert!
         |> Repo.preload(:user)
 

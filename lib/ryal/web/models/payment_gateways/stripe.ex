@@ -6,7 +6,8 @@ defmodule Ryal.PaymentGateway.Stripe do
   @stripe_api_key Map.get(Core.payment_gateways(), :stripe)
   @stripe_base "https://#{@stripe_api_key}:@api.stripe.com"
 
-  @spec create(atom, String.t | nil, Ecto.Schema.t | Map.t, String.t) :: {:ok, String.t}
+  @spec create(atom, String.t | nil, Ecto.Schema.t | Map.t, String.t)
+    :: {:ok, String.t}
 
   def create(type, customer_id, data, stripe_base \\ @stripe_base)
 

@@ -71,6 +71,7 @@ defmodule Ryal.Core.Mixfile do
       {:bypass, "~> 0.6", only: :test},
       {:excoveralls, "~> 0.6", only: :test},
 
+      {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
       {:dummy, path: "test/support/dummy", only: [:dev, :test], optional: true}
     ]
   end
