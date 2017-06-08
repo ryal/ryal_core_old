@@ -46,7 +46,7 @@ defmodule Ryal.UserCommandTest do
         |> UserCommand.update
 
       pids = Process.list -- process_list_before
-      assert Enum.count(pids) == 1
+      assert Enum.count(pids) >= 1
     end
   end
 

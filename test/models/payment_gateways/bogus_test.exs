@@ -6,7 +6,7 @@ defmodule Ryal.PaymentGateway.BogusTest do
 
   describe ".create/2" do
     test "bogus will return an id" do
-      {:ok, id} = Bogus.create(:customer, %User{})
+      {:ok, id} = Bogus.create(:customer, nil, %User{})
       assert String.length(id) == 10
     end
   end

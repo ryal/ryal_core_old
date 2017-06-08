@@ -28,7 +28,7 @@ defmodule Ryal.PaymentGateway.StripeTest do
         Conn.resp(conn, 201, read_fixture("stripe/customer.json"))
       end
 
-      result = Stripe.create(:customer, user, bypass_endpoint(bypass))
+      result = Stripe.create(:customer, nil, user, bypass_endpoint(bypass))
       assert {:ok, "cus_AMUcqwTDYlbBSp"} == result
     end
 
@@ -41,24 +41,30 @@ defmodule Ryal.PaymentGateway.StripeTest do
       end
 
       %PaymentGateway{}
-      |> PaymentGateway.changeset(%{type: "stripe", external_id: "cus_123", user_id: user.id})
+      |> PaymentGateway.changeset(%{
+          type: "stripe", external_id: "cus_123", user_id: user.id
+        })
       |> Repo.insert!
 
-      credit_card = %PaymentMethod{}
-        |> PaymentMethod.changeset(%{
-            type: "credit_card",
-            user_id: user.id,
-            proxy: %{
-              name: "Bobby Orr",
-              number: "4242 4242 4242 4242",
-              month: "08",
-              year: "2029",
-              cvc: "123"
-            }
-          })
-        |> Repo.insert!
+      credit_card_data = %{
+        name: "Bobby Orr",
+        number: "4242 4242 4242 4242",
+        month: "08",
+        year: "2029",
+        cvc: "123"
+      }
 
-      result = Stripe.create(:credit_card, credit_card, bypass_endpoint(bypass))
+      %PaymentMethod{}
+      |> PaymentMethod.changeset(%{
+          type: "credit_card",
+          user_id: user.id,
+          proxy: credit_card_data
+        })
+      |> Repo.insert!
+
+      result = Stripe.create(
+          :credit_card, "cus_123", credit_card_data, bypass_endpoint(bypass)
+        )
       assert {:ok, "card_1AA3En2BZSQJcNSQ77orWzVS"} == result
     end
   end
@@ -70,7 +76,9 @@ defmodule Ryal.PaymentGateway.StripeTest do
         |> Repo.insert!
 
       gateway = %PaymentGateway{}
-        |> PaymentGateway.changeset(%{type: "stripe", external_id: "cus_123", user_id: user.id})
+        |> PaymentGateway.changeset(%{
+            type: "stripe", external_id: "cus_123", user_id: user.id
+          })
         |> Repo.insert!
         |> Repo.preload(:user)
 
@@ -93,7 +101,9 @@ defmodule Ryal.PaymentGateway.StripeTest do
         |> Repo.insert!
 
       gateway = %PaymentGateway{}
-        |> PaymentGateway.changeset(%{type: "stripe", external_id: "cus_123", user_id: user.id})
+        |> PaymentGateway.changeset(%{
+            type: "stripe", external_id: "cus_123", user_id: user.id
+          })
         |> Repo.insert!
         |> Repo.preload(:user)
 
@@ -108,7 +118,4 @@ defmodule Ryal.PaymentGateway.StripeTest do
       assert {:ok, _response} = result
     end
   end
-
-  defp bypass_endpoint(bypass), do: "http://localhost:#{bypass.port}"
-  defp read_fixture(fixture), do: File.read!("test/fixtures/#{fixture}")
 end

@@ -5,8 +5,9 @@ defmodule Ryal.PaymentGateway.Bogus do
   """
 
   @doc "Simple bogus create function for an external_id."
-  @spec create(atom, Ecto.Schema.t) :: {:ok, String.t}
-  def create(_atom, _schema), do: {:ok, random_id()}
+  @spec create(atom, String.t | nil, Ecto.Schema.t | Map.t) :: {:ok, String.t}
+  def create(type, customer_id, data, nil), do: create(type, customer_id, data)
+  def create(_atom, _customer_id, _data), do: {:ok, random_id()}
 
   @doc "Simple bogus update function."
   @spec update(atom, Ecto.Schema.t) :: {:ok, %{}}
@@ -17,7 +18,8 @@ defmodule Ryal.PaymentGateway.Bogus do
   def delete(_atom, _schema), do: {:ok, %{}}
 
   defp random_id do
-    :rand.uniform * 10_000_000_000
+    :rand.uniform
+    |> Kernel.*(10_000_000_000)
     |> round
     |> to_string
     |> String.ljust(10, ?0)

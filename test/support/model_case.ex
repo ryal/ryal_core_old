@@ -20,6 +20,9 @@ defmodule Ryal.ModelCase do
       import Ecto.Changeset
       import Ecto.Query
       import Ryal.ModelCase
+
+      def bypass_endpoint(bypass), do: "http://localhost:#{bypass.port}"
+      def read_fixture(fixture), do: File.read!("test/fixtures/#{fixture}")
     end
   end
 

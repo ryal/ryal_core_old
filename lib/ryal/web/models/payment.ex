@@ -14,18 +14,20 @@ defmodule Ryal.Payment do
 
     has_many :transitions, Ryal.PaymentTransition
 
-    belongs_to :payment_method_gateway, Ryal.PaymentMethodGateway
     belongs_to :order, Ryal.Order
+    belongs_to :payment_method_gateway, Ryal.PaymentMethodGateway
 
     timestamps()
   end
 
-  @required_fields ~w(amount)a
+  @required_fields ~w(amount order_id payment_method_gateway_id)a
   @optional_fields ~w(number)a
 
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_fields ++ @optional_fields)
+    |> assoc_constraint(:order)
+    |> assoc_constraint(:payment_method_gateway)
     |> generate_number
     |> validate_required(@required_fields)
     |> unique_constraint(:number)
