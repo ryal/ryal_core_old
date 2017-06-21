@@ -56,7 +56,7 @@ defmodule Ryal.PaymentMethod.CreditCard do
   end
   def format_number(changeset), do: changeset
 
-  @doc "Get the last 4 digits of the PAN (Primary Account Number)."
+  # Get the last 4 digits of the PAN (Primary Account Number).
   defp cast_number_to_last_digits(%{:changes => %{:number => number}} = changeset) do
     {_, digits} = String.split_at(number, -4)
     put_change(changeset, :last_digits, digits)

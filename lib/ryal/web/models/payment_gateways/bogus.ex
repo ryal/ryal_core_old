@@ -11,11 +11,12 @@ defmodule Ryal.PaymentGateway.Bogus do
 
   @doc "Simple bogus update function."
   @spec update(atom, Ecto.Schema.t) :: {:ok, %{}}
-  def update(_atom, _schema), do: {:ok, %{}}
+  def update(_atom, _customer_id, _external_id, _schema), do: {:ok, %{}}
 
   @doc "Simple bogus delete function."
-  @spec delete(atom, Ecto.Schema.t) :: {:ok, %{}}
-  def delete(_atom, _schema), do: {:ok, %{}}
+  @spec delete(atom, String.t, String.t) :: {:ok, %{}}
+  def delete(_atom, _customer_id, _external_id, nil), do: {:ok, %{}}
+  def delete(_atom, _customer_id, _external_id), do: {:ok, %{}}
 
   defp random_id do
     :rand.uniform
