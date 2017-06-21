@@ -28,15 +28,13 @@ defmodule Ryal.PaymentMethodGatewayCommand do
     payment_gateway_type = String.to_atom(payment_gateway.type)
     payment_gateway_module = Core.payment_gateway_module(payment_gateway_type)
 
+    data = %{customer_id: payment_gateway.external_id}
+      |> Map.put(payment_method_type, payment_method_data)
+
     if endpoint do
-      payment_gateway_module.create(
-        payment_method_type, payment_gateway.external_id, payment_method_data,
-        endpoint
-      )
+      payment_gateway_module.create(payment_method_type, data, endpoint)
     else
-      payment_gateway_module.create(
-        payment_method_type, payment_gateway.external_id, payment_method_data
-      )
+      payment_gateway_module.create(payment_method_type, data)
     end
   end
 

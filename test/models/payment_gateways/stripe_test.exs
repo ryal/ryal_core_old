@@ -28,7 +28,7 @@ defmodule Ryal.PaymentGateway.StripeTest do
         Conn.resp(conn, 201, read_fixture("stripe/customer.json"))
       end
 
-      result = Stripe.create(:customer, nil, user, bypass_endpoint(bypass))
+      result = Stripe.create(:customer, %{user: user}, bypass_endpoint(bypass))
       assert {:ok, "cus_AMUcqwTDYlbBSp"} == result
     end
 
@@ -62,9 +62,8 @@ defmodule Ryal.PaymentGateway.StripeTest do
         })
       |> Repo.insert!
 
-      result = Stripe.create(
-          :credit_card, "cus_123", credit_card_data, bypass_endpoint(bypass)
-        )
+      data = %{customer_id: "cus_123", credit_card: credit_card_data}
+      result = Stripe.create :credit_card, data, bypass_endpoint(bypass)
       assert {:ok, "card_1AA3En2BZSQJcNSQ77orWzVS"} == result
     end
   end
@@ -89,7 +88,8 @@ defmodule Ryal.PaymentGateway.StripeTest do
         Conn.resp(conn, 201, read_fixture("stripe/customer.json"))
       end
 
-      result = Stripe.update(:customer, gateway, bypass_endpoint(bypass))
+      data = %{external_id: gateway.external_id, user: user}
+      result = Stripe.update(:customer, data, bypass_endpoint(bypass))
       assert {:ok, _response} = result
     end
   end
@@ -114,7 +114,8 @@ defmodule Ryal.PaymentGateway.StripeTest do
         Conn.resp(conn, 200, read_fixture("stripe/customer.json"))
       end
 
-      result = Stripe.delete(:customer, gateway, bypass_endpoint(bypass))
+      data = %{external_id: gateway.external_id}
+      result = Stripe.delete(:customer, data, bypass_endpoint(bypass))
       assert {:ok, _response} = result
     end
   end
