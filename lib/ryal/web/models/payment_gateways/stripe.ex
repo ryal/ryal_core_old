@@ -33,25 +33,30 @@ defmodule Ryal.PaymentGateway.Stripe do
   def update(type, schema, stripe_base \\ @stripe_base)
 
   @doc "Updates information on Stripe when the user data changes."
-  def update(:customer, payment_gateway, stripe_base)  do
-    user = payment_gateway.user
-
+  def update(:customer, external_id, user, stripe_base)  do
     response = stripe_base
-      <> "/v1/customers/#{payment_gateway.external_id}"
+      <> "/v1/customers/#{external_id}"
       |> HTTPotion.post([body: params(:customer, user)])
 
     Poison.decode(response.body)
   end
 
   @spec delete(atom, Ecto.Schema.t, String.t) :: {:ok, %{}}
-  def delete(atom, schema, stripe_base \\ @stripe_base)
+  def delete(atom, customer_id, external_id, stripe_base \\ @stripe_base)
 
   @doc "Marks a customer account on Stripe as deleted."
-  def delete(:customer, payment_gateway, stripe_base) do
-    response = stripe_base
-      <> "/v1/customers/#{payment_gateway.external_id}"
-      |> HTTPotion.delete
+  def delete(:customer, customer_id, _external_id, stripe_base) do
+    delete_object(stripe_base <> "/v1/customers/#{customer_id}")
+  end
 
+  @doc "Marks a credit card on Stripe as deleted."
+  def delete(:credit_card, customer_id, card_id, stripe_base) do
+    path = "/v1/customers/#{customer_id}/sources/#{card_id}"
+    delete_object(stripe_base <> path)
+  end
+
+  defp delete_object(url) do
+    response = HTTPotion.delete(url)
     Poison.decode(response.body)
   end
 

@@ -38,21 +38,26 @@ defmodule Ryal.PaymentGatewayCommand do
   information.
   """
   @spec update(Ecto.Schema.t) :: []
-  def update(user), do: update_payment_gateways(user, :update)
+  def update(user) do
+    update_payment_gateways(user, :update, [:customer, payment_gateway])
+  end
 
   @doc """
   If you're going to be deleting your user, then we'll delete the user on the
   payment gateway as well.
   """
   @spec delete(Ecto.Schema.t) :: []
-  def delete(user), do: update_payment_gateways(user, :delete)
+  def delete(user) do
+    args = [:customer, payment_gateway.external_id, nil]
+    update_payment_gateways(user, :delete, args)
+  end
 
-  defp update_payment_gateways(user, action) do
+  defp update_payment_gateways(user, action, args) do
     user = Core.repo.preload(user, :payment_gateways)
 
     Enum.map user.payment_gateways, fn(payment_gateway) ->
       type = String.to_atom payment_gateway.type
-      spawn_monitor payment_gateway(type), action, [:customer, payment_gateway]
+      spawn_monitor payment_gateway(type), action, args
     end
   end
 

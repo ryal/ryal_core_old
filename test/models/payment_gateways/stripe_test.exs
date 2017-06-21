@@ -114,7 +114,23 @@ defmodule Ryal.PaymentGateway.StripeTest do
         Conn.resp(conn, 200, read_fixture("stripe/customer.json"))
       end
 
-      result = Stripe.delete(:customer, gateway, bypass_endpoint(bypass))
+      result = Stripe.delete(:customer, gateway.external_id, nil, bypass_endpoint(bypass))
+      assert {:ok, _response} = result
+    end
+
+    test "can delete a credit card", %{bypass: bypass} do
+      Bypass.expect bypass, fn(conn) ->
+        assert "/v1/customers/cus_123/sources/card_123" == conn.request_path
+        assert "DELETE" == conn.method
+
+        Conn.resp(conn, 201, %{
+          "deleted" => true,
+          "id" => "card_123"
+        })
+      end
+
+      endpoint = bypass_endpoint bypass
+      result = Stripe.delete(:credit_card, "cus_123", "card_123", endpoint)
       assert {:ok, _response} = result
     end
   end
