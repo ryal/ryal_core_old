@@ -3,22 +3,21 @@ defmodule Ryal.PaymentGateway.Stripe do
 
   alias Ryal.Core
 
+  @behaviour Ryal.PaymentGateway
+
   @stripe_api_key Map.get(Core.payment_gateways(), :stripe)
   @stripe_base "https://#{@stripe_api_key}:@api.stripe.com"
 
-  @spec create(atom, String.t | nil, Ecto.Schema.t | Map.t, String.t)
-    :: {:ok, String.t}
+  def create(type, data, stripe_base \\ @stripe_base)
 
-  def create(type, customer_id, data, stripe_base \\ @stripe_base)
+  def create(type, data, nil), do: create(type, data)
 
-  def create(type, customer_id, data, nil), do: create(type, customer_id, data)
-
-  def create(:credit_card, customer_id, credit_card, stripe_base) do
+  def create(:credit_card, %{customer_id: customer_id, credit_card: credit_card}, stripe_base) do
     credit_card_path = "/v1/customers/#{customer_id}/sources"
     create_object credit_card, :credit_card, credit_card_path, stripe_base
   end
 
-  def create(:customer, _customer_id, user, stripe_base) do
+  def create(:customer, %{user: user}, stripe_base) do
     create_object user, :customer, "/v1/customers", stripe_base
   end
 
@@ -29,27 +28,23 @@ defmodule Ryal.PaymentGateway.Stripe do
       do: {:ok, body["id"]}
   end
 
-  @spec update(atom, Ecto.Schema.t, String.t) :: {:ok, %{}}
-  def update(type, schema, stripe_base \\ @stripe_base)
+  def update(type, data, stripe_base \\ @stripe_base)
 
   @doc "Updates information on Stripe when the user data changes."
-  def update(:customer, payment_gateway, stripe_base)  do
-    user = payment_gateway.user
-
+  def update(:customer, %{external_id: external_id, user: user}, stripe_base)  do
     response = stripe_base
-      <> "/v1/customers/#{payment_gateway.external_id}"
+      <> "/v1/customers/#{external_id}"
       |> HTTPotion.post([body: params(:customer, user)])
 
     Poison.decode(response.body)
   end
 
-  @spec delete(atom, Ecto.Schema.t, String.t) :: {:ok, %{}}
   def delete(atom, schema, stripe_base \\ @stripe_base)
 
   @doc "Marks a customer account on Stripe as deleted."
-  def delete(:customer, payment_gateway, stripe_base) do
+  def delete(:customer, %{external_id: external_id}, stripe_base) do
     response = stripe_base
-      <> "/v1/customers/#{payment_gateway.external_id}"
+      <> "/v1/customers/#{external_id}"
       |> HTTPotion.delete
 
     Poison.decode(response.body)

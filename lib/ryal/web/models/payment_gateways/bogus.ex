@@ -4,18 +4,19 @@ defmodule Ryal.PaymentGateway.Bogus do
   create, update, and delete methods with a payment gateway.
   """
 
+  @behaviour Ryal.PaymentGateway
+
   @doc "Simple bogus create function for an external_id."
-  @spec create(atom, String.t | nil, Ecto.Schema.t | Map.t) :: {:ok, String.t}
-  def create(type, customer_id, data, nil), do: create(type, customer_id, data)
-  def create(_atom, _customer_id, _data), do: {:ok, random_id()}
+  def create(_type, _data, _base), do: {:ok, random_id()}
+  def create(_type, _data), do: {:ok, random_id()}
 
   @doc "Simple bogus update function."
-  @spec update(atom, Ecto.Schema.t) :: {:ok, %{}}
-  def update(_atom, _schema), do: {:ok, %{}}
+  def update(_atom, _data, _base), do: {:ok, %{}}
+  def update(_atom, _data), do: {:ok, %{}}
 
   @doc "Simple bogus delete function."
-  @spec delete(atom, Ecto.Schema.t) :: {:ok, %{}}
-  def delete(_atom, _schema), do: {:ok, %{}}
+  def delete(_atom, _data, _base), do: {:ok, %{}}
+  def delete(_atom, _data), do: {:ok, %{}}
 
   defp random_id do
     :rand.uniform
