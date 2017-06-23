@@ -22,7 +22,8 @@ config :dummy, Dummy.Repo,
   adapter: Ecto.Adapters.Postgres,
   pool: Ecto.Adapters.SQL.Sandbox,
   database: "ryal_dummy_#{Mix.env}",
-  username: System.get_env("DUMMY_DB_USER") || System.get_env("USER")
+  username: System.get_env("DUMMY_DB_USER") || "postgres",
+  password: "postgres"
 
 config :ryal_core,
   repo: Dummy.Repo,
