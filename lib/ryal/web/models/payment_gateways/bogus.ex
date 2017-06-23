@@ -4,7 +4,7 @@ defmodule Ryal.PaymentGateway.Bogus do
   create, update, and delete methods with a payment gateway.
   """
 
-  @behaviour Ryal.PaymentGateway.Callbacks
+  @behaviour Ryal.PaymentGateway
 
   @doc "Simple bogus create function for an external_id."
   def create(_type, _data, _base), do: {:ok, random_id()}

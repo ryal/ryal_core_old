@@ -3,7 +3,7 @@ defmodule Ryal.PaymentGateway.Stripe do
 
   alias Ryal.Core
 
-  @behaviour Ryal.PaymentGateway.Callbacks
+  @behaviour Ryal.PaymentGateway
 
   @stripe_api_key Map.get(Core.payment_gateways(), :stripe)
   @stripe_base "https://#{@stripe_api_key}:@api.stripe.com"
