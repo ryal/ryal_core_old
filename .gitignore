@@ -17,4 +17,5 @@ erl_crash.dump
 *.ez
 
 /test/support/dummy/_build/
+/test/support/dummy/config/config.secret.exs
 /test/support/dummy/deps/

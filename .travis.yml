@@ -16,6 +16,7 @@ addons:
   postgresql: "9.6"
 
 install:
+  - cp test/support/dummy/config/config.secret.sample.exs test/support/dummy/config/config.secret.exs
   - mix local.hex --force
   - mix local.rebar --force
   - mix do deps.get, compile

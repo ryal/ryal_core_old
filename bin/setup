@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Exit if any subcommand fails
+set -e
+
+# Copy over the sample file for the DB
+cp test/support/dummy/config/config.secret.sample.exs test/support/dummy/config/config.secret.exs
+
+# Grab all of the dependencies
+mix deps.get
+
+# Setup the test database
+MIX_ENV=test mix db.reset
+
+# Finally, lets make sure everything runs
+mix test

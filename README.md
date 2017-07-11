@@ -56,6 +56,18 @@ Ryal aims to support multiple payment methods and gateways while, at the same ti
 
 ## Development
 
+To set everything up quickly, simply run the following or run the commands below.
+
+```shell
+bin/setup
+```
+
+Copy over the sample files:
+
+```shell
+cp test/support/dummy/config/config.secret.sample.exs test/support/dummy/config/config.secret.exs
+```
+
 Get the dependencies first with
 
 ```shell

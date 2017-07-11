@@ -17,14 +17,6 @@ config :dummy, Dummy.Endpoint,
   secret_key_base: "testing123",
   render_errors: [view: Dummy.ErrorView, accepts: ~w(html json json-api)]
 
-config :dummy, Dummy.Repo,
-  priv: "../ryal_core/priv/repo",
-  adapter: Ecto.Adapters.Postgres,
-  pool: Ecto.Adapters.SQL.Sandbox,
-  database: "ryal_dummy_#{Mix.env}",
-  username: System.get_env("DUMMY_DB_USER") || "postgres",
-  password: "postgres"
-
 config :ryal_core,
   repo: Dummy.Repo,
   user_module: Dummy.User,
@@ -33,3 +25,5 @@ config :ryal_core,
   payment_gateways: %{
     stripe: "sk_test_123"
   }
+
+import_config "./config.secret.exs"
