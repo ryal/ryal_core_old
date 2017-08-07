@@ -13,8 +13,6 @@ defmodule Ryal.Core do
   @user_module get_env(:ryal_core, :user_module)
   @user_table get_env(:ryal_core, :user_table)
 
-  @default_payment_gateway get_env(:ryal_core, :default_payment_gateway)
-
   @payment_gateway_modules get_env(:ryal_core, :payment_gateway_modules)
   @default_payment_gateway_modules %{
     bogus: PaymentGateway.Bogus,
@@ -26,8 +24,17 @@ defmodule Ryal.Core do
     credit_card: PaymentMethod.CreditCard
   }
 
-  def payment_gateways, do: get_env(:ryal_core, :payment_gateways) || %{}
-  def default_payment_gateway, do: @default_payment_gateway
+  @spec payment_gateways() :: list
+  def payment_gateways, do: get_env(:ryal_core, :payment_gateways) || []
+
+  @spec default_payment_gateway() :: tuple | nil
+  def default_payment_gateway, do: List.first(payment_gateways())
+
+  @spec payment_gateway_data(atom) :: String.t | map
+  def payment_gateway_data(type) do
+    [{^type, data}] = Keyword.take(payment_gateways(), [type])
+    data
+  end
 
   @spec payment_gateway_modules() :: %{}
   def payment_gateway_modules do
@@ -37,8 +44,10 @@ defmodule Ryal.Core do
   @spec payment_gateway_module(atom) :: module | nil
   def payment_gateway_module(type), do: Map.get(payment_gateway_modules(), type)
 
+  @spec fallback_gateways() :: list
   def fallback_gateways do
-    Map.keys(payment_gateways()) -- [@default_payment_gateway]
+    [_default|fallbacks] = payment_gateways()
+    fallbacks
   end
 
   @spec payment_methods() :: map

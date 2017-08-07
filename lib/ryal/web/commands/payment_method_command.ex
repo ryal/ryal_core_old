@@ -73,7 +73,8 @@ defmodule Ryal.PaymentMethodCommand do
   end
 
   defp default_payment_gateway?(payment_gateway) do
-    String.to_atom(payment_gateway.type) == Core.default_payment_gateway()
+    {default, _data} = Core.default_payment_gateway()
+    String.to_atom(payment_gateway.type) == default
   end
 
   @doc """

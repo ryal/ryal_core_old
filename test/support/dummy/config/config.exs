@@ -21,9 +21,9 @@ config :ryal_core,
   repo: Dummy.Repo,
   user_module: Dummy.User,
   user_table: :users,
-  default_payment_gateway: :bogus,
-  payment_gateways: %{
+  payment_gateways: [
+    bogus: "",
     stripe: "sk_test_123"
-  }
+  ]
 
 import_config "./config.secret.exs"
