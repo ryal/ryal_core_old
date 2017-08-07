@@ -39,7 +39,7 @@ defmodule Ryal.JsonRenderPlug do
     |> render_instance(params, result)
   end
 
-  def render_creation(conn, params, {:error, changeset}) do
+  def render_creation(conn, _params, {:error, changeset}) do
     conn
     |> Conn.put_status(422)
     |> Controller.render(:errors, data: changeset)
