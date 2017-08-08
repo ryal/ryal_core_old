@@ -5,7 +5,7 @@ defmodule Ryal.PaymentGateway.Stripe do
 
   @behaviour Ryal.PaymentGateway
 
-  @stripe_api_key Core.payment_gateway_data(:stripe)
+  @stripe_api_key Core.payment_gateway(:stripe)[:token]
   @stripe_base "https://#{@stripe_api_key}:@api.stripe.com"
 
   def create(type, data, stripe_base \\ @stripe_base)

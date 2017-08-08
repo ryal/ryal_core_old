@@ -30,10 +30,9 @@ defmodule Ryal.Core do
   @spec default_payment_gateway() :: tuple | nil
   def default_payment_gateway, do: List.first(payment_gateways())
 
-  @spec payment_gateway_data(atom) :: String.t | map
-  def payment_gateway_data(type) do
-    [{^type, data}] = Keyword.take(payment_gateways(), [type])
-    data
+  @spec payment_gateway(atom) :: String.t | map
+  def payment_gateway(type) do
+    Enum.find(payment_gateways(), &(&1[:type] == type))
   end
 
   @spec payment_gateway_modules() :: %{}
@@ -64,10 +63,10 @@ defmodule Ryal.Core do
   @spec repo() :: module
   def repo, do: @repo
 
-  @spec user_module :: module
+  @spec user_module() :: module
   def user_module, do: @user_module
 
-  @spec user_table :: module
+  @spec user_table() :: module
   def user_table, do: @user_table
 
   @spec start(atom, list) :: Supervisor.on_start

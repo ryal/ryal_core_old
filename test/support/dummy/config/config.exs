@@ -22,8 +22,8 @@ config :ryal_core,
   user_module: Dummy.User,
   user_table: :users,
   payment_gateways: [
-    bogus: "",
-    stripe: "sk_test_123"
+    %{type: :bogus},
+    %{type: :stripe, token: "sk_test_123"}
   ]
 
 import_config "./config.secret.exs"
