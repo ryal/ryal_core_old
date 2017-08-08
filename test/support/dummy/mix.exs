@@ -13,6 +13,7 @@ defmodule Dummy.Mixfile do
       start_permanent: false,
       compilers: [:phoenix] ++ Mix.compilers(),
       deps: [
+        {:ryal_core, path: "../../.."},
         {:postgrex, ">= 0.0.0"},
         {:phoenix, "~> 1.2"},
         {:phoenix_ecto, "~> 3.2.1"},
@@ -27,7 +28,7 @@ defmodule Dummy.Mixfile do
       mod: {Dummy, []},
       applications: [
         :ecto, :postgrex, :phoenix, :phoenix_ecto, :scrivener_ecto,
-        :ja_serializer
+        :ja_serializer, :ryal_core
       ]
     ]
   end
