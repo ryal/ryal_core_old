@@ -24,12 +24,20 @@ defmodule Ryal.Core do
     credit_card: PaymentMethod.CreditCard
   }
 
+  @doc "List all of the payment gateways configured for the application."
   @spec payment_gateways() :: list
   def payment_gateways, do: get_env(:ryal_core, :payment_gateways) || []
 
+  @doc """
+  This is the first payment gateway you listed for your application. We use the
+  first ateway you specify as the primary gateway, then the second as the
+  secondary, third is the tertiary, and so on... This way you know exactly how
+  Ryal will fallback if your primary gateway isn't working.
+  """
   @spec default_payment_gateway() :: tuple | nil
   def default_payment_gateway, do: List.first(payment_gateways())
 
+  @doc "This loads up the map of data that you want specified by a data type."
   @spec payment_gateway(atom) :: String.t | map
   def payment_gateway(type) do
     Enum.find(payment_gateways(), &(&1[:type] == type))
