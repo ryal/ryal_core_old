@@ -23,6 +23,6 @@ defmodule Ryal.PaymentGateway.Bogus do
     |> Kernel.*(10_000_000_000)
     |> round
     |> to_string
-    |> String.ljust(10, ?0)
+    |> String.pad_trailing(10, "0")
   end
 end
