@@ -1,4 +1,5 @@
-{:ok, _} = Dummy.Repo.__adapter__.ensure_all_started(Dummy.Repo, :temporary)
+{:ok, _pid} = Dummy.Repo.start_link()
+{:ok, _pid} = Dummy.Endpoint.start_link()
 
 Ecto.Adapters.SQL.Sandbox.mode(Dummy.Repo, :manual)
 

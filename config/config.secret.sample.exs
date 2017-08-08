@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :dummy, Dummy.Repo,
+config :ryal_core, Dummy.Repo,
   priv: "../ryal_core/priv/repo",
   adapter: Ecto.Adapters.Postgres,
   pool: Ecto.Adapters.SQL.Sandbox,
