@@ -62,7 +62,9 @@ defmodule Ryal.PaymentMethodCommand do
     end)
   end
 
-  defp create_payment_method_gateway(payment_gateway, _payment_method, _payment_method_data) when is_nil(payment_gateway), do: nil
+  defp create_payment_method_gateway(payment_gateway, _payment_method, _payment_method_data)
+    when is_nil(payment_gateway), do: nil
+
   defp create_payment_method_gateway(payment_gateway, payment_method, payment_method_data) do
     %PaymentMethodGateway{}
     |> PaymentMethodGateway.changeset(%{
@@ -73,7 +75,8 @@ defmodule Ryal.PaymentMethodCommand do
   end
 
   defp default_payment_gateway?(payment_gateway) do
-    String.to_atom(payment_gateway.type) == Core.default_payment_gateway()
+    default = Core.default_payment_gateway()[:type]
+    String.to_atom(payment_gateway.type) == default
   end
 
   @doc """

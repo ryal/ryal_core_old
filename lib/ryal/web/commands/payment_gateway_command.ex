@@ -10,11 +10,13 @@ defmodule Ryal.PaymentGatewayCommand do
   @spec create(Ecto.Schema.t) ::
      {:ok, Ecto.Schema.t} | {:error, Ecto.Changeset.t}
   def create(user) do
-    Enum.each Core.fallback_gateways() || [], fn(gateway_type) ->
-      spawn_monitor fn -> create(gateway_type, user) end
+    [default_gateway|fallback_gateways] = Core.payment_gateways()
+
+    Enum.each fallback_gateways, fn(fallback_gateway) ->
+      spawn_monitor fn -> create(fallback_gateway[:type], user) end
     end
 
-    create Core.default_payment_gateway(), user
+    create default_gateway[:type], user
   end
 
   @doc """
