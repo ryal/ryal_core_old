@@ -1,7 +1,7 @@
 defmodule Dummy.Endpoint do
   @moduledoc false
 
-  use Phoenix.Endpoint, otp_app: :dummy
+  use Phoenix.Endpoint, otp_app: :ryal_core
 
   # socket "/socket", Ryal.UserSocket
 
@@ -10,7 +10,7 @@ defmodule Dummy.Endpoint do
   # You should set gzip to true if you are running phoenix.digest
   # when deploying your static files in production.
   plug Plug.Static,
-    at: "/", from: :dummy, gzip: false,
+    at: "/", from: :ryal_core, gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
   plug Plug.RequestId

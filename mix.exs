@@ -52,8 +52,7 @@ defmodule Ryal.Core.Mixfile do
     ]
   end
 
-  defp applications(:dev), do: [:dummy]
-  defp applications(:test), do: [:bypass, :dummy]
+  defp applications(:test), do: [:bypass]
   defp applications(_), do: []
 
   defp deps do
@@ -72,11 +71,10 @@ defmodule Ryal.Core.Mixfile do
       {:excoveralls, "~> 0.6", only: :test},
 
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
-      {:dummy, path: "test/support/dummy", only: [:dev, :test], optional: true}
     ]
   end
 
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(env) when env in ~w(dev test)a, do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
   defp package do

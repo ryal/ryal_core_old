@@ -4,7 +4,7 @@
 set -e
 
 # Copy over the sample file for the DB
-cp test/support/dummy/config/config.secret.sample.exs test/support/dummy/config/config.secret.exs
+cp config/config.secret.sample.exs config/config.secret.exs
 
 # Grab all of the dependencies
 mix deps.get

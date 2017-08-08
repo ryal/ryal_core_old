@@ -16,6 +16,4 @@ erl_crash.dump
 # Also ignore archive artifacts (built via "mix archive.build").
 *.ez
 
-/test/support/dummy/_build/
-/test/support/dummy/config/config.secret.exs
-/test/support/dummy/deps/
+/config/config.secret.exs
