@@ -7,32 +7,34 @@ defmodule Ryal.Api.OrderViewTest do
   alias Ryal.Order
 
   test "renders show.json-api" do
-    user = %User{}
+    user =
+      %User{}
       |> User.changeset(%{email: "ryal@example.com"})
-      |> Repo.insert!
+      |> Repo.insert!()
 
-    order = %Order{}
+    order =
+      %Order{}
       |> Order.changeset(%{user_id: user.id})
-      |> Repo.insert!
+      |> Repo.insert!()
 
     result = OrderView.render("show.json-api", data: order, conn: build_conn())
 
     assert result == %{
-      "data" => %{
-        "attributes" => %{
-          "number" => order.number,
-          "state" => "cart",
-          "total" => 0.0
-        },
-        "id" => Poison.encode!(order.id),
-        "type" => "order",
-        "relationships" => %{
-          "payments" => %{}
-        }
-      },
-      "jsonapi" => %{
-        "version" => "1.0"
-      }
-    }
+             "data" => %{
+               "attributes" => %{
+                 "number" => order.number,
+                 "state" => "cart",
+                 "total" => 0.0
+               },
+               "id" => Jason.encode!(order.id),
+               "type" => "order",
+               "relationships" => %{
+                 "payments" => %{}
+               }
+             },
+             "jsonapi" => %{
+               "version" => "1.0"
+             }
+           }
   end
 end

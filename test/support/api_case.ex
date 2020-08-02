@@ -16,8 +16,8 @@ defmodule Ryal.ApiCase do
       @endpoint Dummy.Endpoint
 
       def render_json(view, template, assigns) do
-        template
-        <> ".json-api"
+        (template <>
+           ".json-api")
         |> view.render(assigns)
         |> format_json
       end
@@ -30,8 +30,8 @@ defmodule Ryal.ApiCase do
 
       defp format_json(data) do
         data
-        |> Poison.encode!
-        |> Poison.decode!
+        |> Jason.encode!()
+        |> Jason.decode!()
       end
     end
   end
@@ -43,8 +43,10 @@ defmodule Ryal.ApiCase do
       Ecto.Adapters.SQL.Sandbox.mode(Dummy.Repo, {:shared, self()})
     end
 
-    conn = Phoenix.ConnTest.build_conn
-    conn = %{conn | host: "api.example.com"}
+    conn = Phoenix.ConnTest.build_conn()
+
+    conn =
+      %{conn | host: "api.example.com"}
       |> Plug.Conn.put_req_header("accept", "application/vnd.api+json")
       |> Plug.Conn.put_req_header("content-type", "application/vnd.api+json")
 

@@ -8,7 +8,8 @@ config :logger,
   level: :warn,
   truncate: 4096
 
-config :phoenix, :format_encoders, "json-api": Poison
+config :phoenix, :format_encoders, "json-api": Jason
+config :phoenix, :json_library, Jason
 
 config :dummy, Dummy.Endpoint,
   http: [port: 4001],

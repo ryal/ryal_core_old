@@ -14,21 +14,15 @@ defmodule Dummy.Mixfile do
       compilers: [:phoenix] ++ Mix.compilers(),
       deps: [
         {:postgrex, ">= 0.0.0"},
-        {:phoenix, "~> 1.2"},
-        {:phoenix_ecto, "~> 3.2.1"},
-        {:ja_serializer, "~> 0.12.0"},
-        {:scrivener_ecto, "~> 1.1"}
+        {:ecto, "~> 3.0"},
+        {:ecto_sql, "~> 3.0"},
+        {:phoenix, "~> 1.5"},
+        {:phoenix_ecto, "~> 4.1"},
+        {:ja_serializer, "~> 0.15"},
+        {:scrivener_ecto, "~> 2.4"}
       ]
     ]
   end
 
-  def application do
-    [
-      mod: {Dummy, []},
-      applications: [
-        :ecto, :postgrex, :phoenix, :phoenix_ecto, :scrivener_ecto,
-        :ja_serializer
-      ]
-    ]
-  end
+  def application, do: [mod: {Dummy, []}]
 end

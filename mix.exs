@@ -44,17 +44,19 @@ defmodule Ryal.Core.Mixfile do
 
   defp deps do
     [
-      {:ecto, "~> 2.1"},
-      {:ja_serializer, "~> 0.12"},
-      {:phoenix, "~> 1.2"},
-      {:phoenix_ecto, "~> 3.2.1"},
-      {:postgrex, ">= 0.13.0"},
-      {:scrivener_ecto, "~> 1.1"},
-      {:httpotion, "~> 3.0.2"},
-      {:ex_doc, "~> 0.14", only: :dev},
-      {:bypass, "~> 0.6", only: :test},
-      {:excoveralls, "~> 0.6", only: :test},
-      {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
+      {:ecto, "~> 3.0"},
+      {:ecto_sql, "~> 3.0"},
+      {:ja_serializer, "~> 0.15"},
+      {:cowlib, "~> 2.8.0"},
+      {:phoenix, "~> 1.5"},
+      {:phoenix_ecto, "~> 4.1"},
+      {:postgrex, ">= 0.15.0"},
+      {:scrivener_ecto, "~> 2.4"},
+      {:httpotion, "~> 3.1"},
+      {:ex_doc, "~> 0.22", only: :dev, runtime: false},
+      {:bypass, "~> 1.0", only: :test},
+      {:excoveralls, "~> 0.13", only: :test},
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:dummy, path: "test/support/dummy", only: [:dev, :test], optional: true}
     ]
   end

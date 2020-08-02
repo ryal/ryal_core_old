@@ -3,9 +3,9 @@ sudo: false
 
 language: elixir
 otp_release:
-  - 19.3
+  - 22.0
 elixir:
-  - 1.4.2
+  - 1.10.4
 
 cache:
   directories:
@@ -13,12 +13,11 @@ cache:
     - deps
 
 addons:
-  postgresql: "9.6"
+  postgresql: "12.3"
 
 install:
   - cp test/support/dummy/config/config.secret.sample.exs test/support/dummy/config/config.secret.exs
-  - mix local.hex --force
-  - mix local.rebar --force
+  - mix do local.hex --force, local.rebar --force
   - mix do deps.get, compile
 before_script:
   - mix db.reset
