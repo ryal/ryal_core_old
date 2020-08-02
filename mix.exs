@@ -39,28 +39,8 @@ defmodule Ryal.Core.Mixfile do
   end
 
   def application do
-    [
-      mod: {Ryal.Core, []},
-      applications: applications() ++ applications(Mix.env())
-    ]
+    [extra_applications: [:logger], mod: {Ryal.Core, []}]
   end
-
-  defp applications do
-    [
-      :phoenix,
-      :phoenix_ecto,
-      :logger,
-      :ecto,
-      :postgrex,
-      :scrivener,
-      :scrivener_ecto,
-      :httpotion
-    ]
-  end
-
-  defp applications(:dev), do: [:dummy]
-  defp applications(:test), do: [:bypass, :dummy]
-  defp applications(_), do: []
 
   defp deps do
     [
