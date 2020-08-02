@@ -10,16 +10,16 @@ defmodule Ryal.Core.Mixfile do
       config_path: "config/config.exs",
       deps_path: "deps",
       lockfile: "mix.lock",
-      elixirc_paths: elixirc_paths(Mix.env),
-      build_embedded: Mix.env == :prod,
-      start_permanent: Mix.env == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
       aliases: aliases(),
-      compilers: [:phoenix] ++ Mix.compilers,
+      compilers: [:phoenix] ++ Mix.compilers(),
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
-        "coveralls": :test,
+        coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test
@@ -41,14 +41,20 @@ defmodule Ryal.Core.Mixfile do
   def application do
     [
       mod: {Ryal.Core, []},
-      applications: applications() ++ applications(Mix.env)
+      applications: applications() ++ applications(Mix.env())
     ]
   end
 
   defp applications do
     [
-      :phoenix, :phoenix_ecto, :logger, :ecto, :postgrex, :scrivener,
-      :scrivener_ecto, :httpotion
+      :phoenix,
+      :phoenix_ecto,
+      :logger,
+      :ecto,
+      :postgrex,
+      :scrivener,
+      :scrivener_ecto,
+      :httpotion
     ]
   end
 
@@ -65,12 +71,9 @@ defmodule Ryal.Core.Mixfile do
       {:postgrex, ">= 0.13.0"},
       {:scrivener_ecto, "~> 1.1"},
       {:httpotion, "~> 3.0.2"},
-
       {:ex_doc, "~> 0.14", only: :dev},
-
       {:bypass, "~> 0.6", only: :test},
       {:excoveralls, "~> 0.6", only: :test},
-
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
       {:dummy, path: "test/support/dummy", only: [:dev, :test], optional: true}
     ]
