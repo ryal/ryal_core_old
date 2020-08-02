@@ -3,8 +3,8 @@ defmodule Ryal.Repo.Migrations.CreateRyalOrders do
 
   def change do
     create table(:ryal_orders) do
-      add :number, :string, null: false
-      add :state, :string, default: "cart", null: false
+      add :number, :text, null: false
+      add :state, :text, default: "cart", null: false
       add :total, :decimal, null: false
 
       add :user_id, references(Ryal.Core.user_table()), null: false

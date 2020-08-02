@@ -3,10 +3,10 @@ defmodule Ryal.Repo.Migrations.CreateRyalPaymentTransitions do
 
   def change do
     create table(:ryal_payment_transitions) do
-      add :from, :string, null: false
-      add :to, :string, null: false
-      add :event, :string, null: false
-      add :result, :string, null: false
+      add :from, :text, null: false
+      add :to, :text, null: false
+      add :event, :text, null: false
+      add :result, :text, null: false
 
       add :payment_id, references(:ryal_payments), null: false
 

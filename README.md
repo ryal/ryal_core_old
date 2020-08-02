@@ -9,7 +9,7 @@ Ryal Core manages two main components: orders and payments.
 It's kinda hard to run any type of an e-commerce application without at least the two guys.
 
 Payments is structured so that you can process payments with redundancy.
-Ryal aims to support multiple payment methods and gateways while, at the same time, creating a profile per user to each of the gateways incase one of them goes down for a few hours.
+Ryal aims to support multiple payment methods and gateways while, at the same time, creating a profile per user to each of the gateways in case one of them goes down for a few hours.
 
 ## Minimum requirement
 

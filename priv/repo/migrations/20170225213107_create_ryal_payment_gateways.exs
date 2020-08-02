@@ -3,8 +3,8 @@ defmodule Ryal.Repo.Migrations.CreateRyalUserGateways do
 
   def change do
     create table(:ryal_payment_gateways) do
-      add :type, :string, null: false
-      add :external_id, :string, null: false
+      add :type, :text, null: false
+      add :external_id, :text, null: false
 
       add :user_id, references(Ryal.Core.user_table(), on_delete: :delete_all), null: false
 
