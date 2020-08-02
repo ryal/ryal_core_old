@@ -8,43 +8,46 @@ defmodule Ryal.PaymentGateway.StripeTest do
   alias Plug.Conn
 
   setup do
-    [bypass: Bypass.open]
+    [bypass: Bypass.open()]
   end
 
   describe ".create/3" do
     setup do
-      user = %User{}
+      user =
+        %User{}
         |> User.changeset(%{email: "ryal@example.com"})
-        |> Repo.insert!
+        |> Repo.insert!()
 
       [user: user]
     end
 
     test "will return an id for a customer", %{bypass: bypass, user: user} do
-      Bypass.expect bypass, fn(conn) ->
+      Bypass.expect(bypass, fn conn ->
         assert "/v1/customers" == conn.request_path
         assert "POST" == conn.method
 
         Conn.resp(conn, 201, read_fixture("stripe/customer.json"))
-      end
+      end)
 
       result = Stripe.create(:customer, %{user: user}, bypass_endpoint(bypass))
       assert {:ok, "cus_AMUcqwTDYlbBSp"} == result
     end
 
     test "will return an id for a credit card", %{bypass: bypass, user: user} do
-      Bypass.expect bypass, fn(conn) ->
+      Bypass.expect(bypass, fn conn ->
         assert "/v1/customers/cus_123/sources" == conn.request_path
         assert "POST" == conn.method
 
         Conn.resp(conn, 201, read_fixture("stripe/credit_card.json"))
-      end
+      end)
 
       %PaymentGateway{}
       |> PaymentGateway.changeset(%{
-          type: "stripe", external_id: "cus_123", user_id: user.id
-        })
-      |> Repo.insert!
+        type: "stripe",
+        external_id: "cus_123",
+        user_id: user.id
+      })
+      |> Repo.insert!()
 
       credit_card_data = %{
         name: "Bobby Orr",
@@ -56,37 +59,41 @@ defmodule Ryal.PaymentGateway.StripeTest do
 
       %PaymentMethod{}
       |> PaymentMethod.changeset(%{
-          type: "credit_card",
-          user_id: user.id,
-          proxy: credit_card_data
-        })
-      |> Repo.insert!
+        type: "credit_card",
+        user_id: user.id,
+        proxy: credit_card_data
+      })
+      |> Repo.insert!()
 
       data = %{customer_id: "cus_123", credit_card: credit_card_data}
-      result = Stripe.create :credit_card, data, bypass_endpoint(bypass)
+      result = Stripe.create(:credit_card, data, bypass_endpoint(bypass))
       assert {:ok, "card_1AA3En2BZSQJcNSQ77orWzVS"} == result
     end
   end
 
   describe ".update/3" do
     test "can update a customer", %{bypass: bypass} do
-      user = %User{}
+      user =
+        %User{}
         |> User.changeset(%{email: "ryal@example.com"})
-        |> Repo.insert!
+        |> Repo.insert!()
 
-      gateway = %PaymentGateway{}
+      gateway =
+        %PaymentGateway{}
         |> PaymentGateway.changeset(%{
-            type: "stripe", external_id: "cus_123", user_id: user.id
-          })
-        |> Repo.insert!
+          type: "stripe",
+          external_id: "cus_123",
+          user_id: user.id
+        })
+        |> Repo.insert!()
         |> Repo.preload(:user)
 
-      Bypass.expect bypass, fn(conn) ->
+      Bypass.expect(bypass, fn conn ->
         assert "/v1/customers/cus_123" == conn.request_path
         assert "POST" == conn.method
 
         Conn.resp(conn, 201, read_fixture("stripe/customer.json"))
-      end
+      end)
 
       data = %{external_id: gateway.external_id, user: user}
       result = Stripe.update(:customer, data, bypass_endpoint(bypass))
@@ -96,23 +103,27 @@ defmodule Ryal.PaymentGateway.StripeTest do
 
   describe ".delete/3" do
     test "can delete a customer", %{bypass: bypass} do
-      user = %User{}
+      user =
+        %User{}
         |> User.changeset(%{email: "ryal@example.com"})
-        |> Repo.insert!
+        |> Repo.insert!()
 
-      gateway = %PaymentGateway{}
+      gateway =
+        %PaymentGateway{}
         |> PaymentGateway.changeset(%{
-            type: "stripe", external_id: "cus_123", user_id: user.id
-          })
-        |> Repo.insert!
+          type: "stripe",
+          external_id: "cus_123",
+          user_id: user.id
+        })
+        |> Repo.insert!()
         |> Repo.preload(:user)
 
-      Bypass.expect bypass, fn(conn) ->
+      Bypass.expect(bypass, fn conn ->
         assert "/v1/customers/cus_123" == conn.request_path
         assert "DELETE" == conn.method
 
         Conn.resp(conn, 200, read_fixture("stripe/customer.json"))
-      end
+      end)
 
       data = %{external_id: gateway.external_id}
       result = Stripe.delete(:customer, data, bypass_endpoint(bypass))

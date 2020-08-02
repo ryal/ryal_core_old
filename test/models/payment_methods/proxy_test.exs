@@ -16,10 +16,12 @@ defmodule Ryal.PaymentMethod.ProxyTest do
       params = Map.from_struct(%CreditCard{})
       changeset = CreditCard.changeset(%CreditCard{}, params)
       expectation = cast(%Proxy{}, %{data: params}, [:data])
-      assert Proxy.changeset(%Proxy{}, %CreditCard{}) == Map.merge(expectation, %{
-          errors: changeset.errors,
-          valid?: false
-        })
+
+      assert Proxy.changeset(%Proxy{}, %CreditCard{}) ==
+               Map.merge(expectation, %{
+                 errors: changeset.errors,
+                 valid?: false
+               })
     end
   end
 end

@@ -7,9 +7,10 @@ defmodule Ryal.PaymentGatewayCommandTest do
   alias Ryal.PaymentGatewayCommand
 
   setup do
-    user = %User{email: "hello@example.com"}
-      |> User.changeset
-      |> Repo.insert!
+    user =
+      %User{email: "hello@example.com"}
+      |> User.changeset()
+      |> Repo.insert!()
 
     [user: user]
   end
@@ -26,9 +27,9 @@ defmodule Ryal.PaymentGatewayCommandTest do
     test "will update all bogus customers", %{user: user} do
       {:ok, _} = PaymentGatewayCommand.create(:bogus, user)
 
-      Enum.each PaymentGatewayCommand.update(user), fn({_status, ref}) ->
+      Enum.each(PaymentGatewayCommand.update(user), fn {_status, ref} ->
         assert_receive {:DOWN, ^ref, :process, _, :normal}, 500
-      end
+      end)
     end
   end
 
@@ -36,9 +37,9 @@ defmodule Ryal.PaymentGatewayCommandTest do
     test "will delete all bogus customers", %{user: user} do
       {:ok, _} = PaymentGatewayCommand.create(:bogus, user)
 
-      Enum.each PaymentGatewayCommand.delete(user), fn({_status, ref}) ->
+      Enum.each(PaymentGatewayCommand.delete(user), fn {_status, ref} ->
         assert_receive {:DOWN, ^ref, :process, _, :normal}, 500
-      end
+      end)
     end
   end
 end

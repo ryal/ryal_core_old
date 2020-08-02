@@ -6,5 +6,5 @@ defmodule Ryal.Api.OrderView do
 
   attributes [:number, :state, :total]
 
-  has_many :payments
+  has_many(:payments)
 end

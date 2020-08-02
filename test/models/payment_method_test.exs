@@ -6,7 +6,8 @@ defmodule Ryal.PaymentMethodTest do
 
   describe ".changeset/2" do
     test "will cast the appropriate data embed" do
-      changeset = PaymentMethod.changeset(%PaymentMethod{}, %{
+      changeset =
+        PaymentMethod.changeset(%PaymentMethod{}, %{
           type: "credit_card"
         })
 

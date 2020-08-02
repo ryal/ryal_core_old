@@ -15,22 +15,26 @@ defmodule Ryal.JsonRenderPlug do
     tenant = conn.assigns[:subdomain]
     prefix = if tenant, do: "tenant_#{tenant}", else: "public"
 
-    data = collection
-      |> Queryable.to_query
+    data =
+      collection
+      |> Queryable.to_query()
       |> Map.put(:prefix, prefix)
       |> JsonApiQuery.filter(params["filter"], Controller.view_module(conn))
       |> JsonApiQuery.sort(params["sort"], Controller.view_module(conn))
-      |> Core.repo.paginate(params["page"])
+      |> Core.repo().paginate(params["page"])
 
-    Controller.render conn, data: data, opts: [
-      fields: params["fields"],
-      include: params["include"]
-    ]
+    Controller.render(conn,
+      data: data,
+      opts: [
+        fields: params["fields"],
+        include: params["include"]
+      ]
+    )
   end
 
   def render_instance(conn, params, instance) do
     opts = [fields: params["fields"], include: params["include"]]
-    Controller.render conn, :show, data: instance, opts: opts
+    Controller.render(conn, :show, data: instance, opts: opts)
   end
 
   def render_creation(conn, params, {:ok, result}) do

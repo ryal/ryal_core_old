@@ -31,26 +31,31 @@ defmodule Ryal.PaymentMethod.CreditCardTest do
 
     test "can use numbers with tabs", %{attrs: params} do
       params = %{params | number: "4242 4242  4242  4242"}
-      changeset = %CreditCard{}
+
+      changeset =
+        %CreditCard{}
         |> Ecto.Changeset.cast(params, Map.keys(params))
-        |> CreditCard.format_number
+        |> CreditCard.format_number()
 
       assert changeset.changes.number == "4242424242424242"
       assert changeset.valid?
     end
 
     test "can use numbers with line endings", %{attrs: params} do
-      params = %{params | number: """
-        4242
-        4242
-        4242
-        4242
-        """
+      params = %{
+        params
+        | number: """
+          4242
+          4242
+          4242
+          4242
+          """
       }
 
-      changeset = %CreditCard{}
+      changeset =
+        %CreditCard{}
         |> Ecto.Changeset.cast(params, Map.keys(params))
-        |> CreditCard.format_number
+        |> CreditCard.format_number()
 
       assert changeset.changes.number == "4242424242424242"
       assert changeset.valid?

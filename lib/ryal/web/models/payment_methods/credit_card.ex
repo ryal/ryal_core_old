@@ -15,9 +15,13 @@ defmodule Ryal.PaymentMethod.CreditCard do
 
   use Ecto.Schema
 
-  import Ecto.Changeset, only: [
-    cast: 3, validate_required: 2, put_change: 3, delete_change: 2
-  ]
+  import Ecto.Changeset,
+    only: [
+      cast: 3,
+      validate_required: 2,
+      put_change: 3,
+      delete_change: 2
+    ]
 
   embedded_schema do
     field :name, :string

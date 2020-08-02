@@ -19,7 +19,7 @@ defmodule Ryal.PaymentGateway.Bogus do
   def delete(_atom, _data), do: {:ok, %{}}
 
   defp random_id do
-    :rand.uniform
+    :rand.uniform()
     |> Kernel.*(10_000_000_000)
     |> round
     |> to_string

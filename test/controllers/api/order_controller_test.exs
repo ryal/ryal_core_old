@@ -8,13 +8,14 @@ defmodule Ryal.Api.OrderControllerTest do
 
   describe "index/2" do
     test "will list orders", %{conn: conn} do
-      user = %User{}
+      user =
+        %User{}
         |> User.changeset(%{email: "ryal@example.com"})
-        |> Repo.insert!
+        |> Repo.insert!()
 
       %Order{}
       |> Order.changeset(%{user_id: user.id})
-      |> Repo.insert!
+      |> Repo.insert!()
 
       conn = get(conn, order_path(conn, :index))
       orders = Repo.paginate(Order)

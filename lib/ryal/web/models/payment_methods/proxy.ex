@@ -39,13 +39,15 @@ defmodule Ryal.PaymentMethod.Proxy do
     %module{} = struct
     params = Map.from_struct(struct)
 
-    proxy_changeset = module
+    proxy_changeset =
+      module
       |> struct(%{})
       |> module.changeset(params)
 
-    data = proxy_changeset
-      |> Ecto.Changeset.apply_changes
-      |> Map.from_struct
+    data =
+      proxy_changeset
+      |> Ecto.Changeset.apply_changes()
+      |> Map.from_struct()
 
     %__MODULE__{}
     |> cast(%{data: data}, [:data])

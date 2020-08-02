@@ -5,7 +5,7 @@ defmodule Dummy do
 
   use Application
 
-  @spec start(atom, list) :: Supervisor.on_start
+  @spec start(atom, list) :: Supervisor.on_start()
   def start(_type, _args) do
     import Supervisor.Spec
 

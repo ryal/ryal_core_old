@@ -38,7 +38,7 @@ defmodule Ryal.Core do
   def default_payment_gateway, do: List.first(payment_gateways())
 
   @doc "This loads up the map of data that you want specified by a data type."
-  @spec payment_gateway(atom) :: String.t | map
+  @spec payment_gateway(atom) :: String.t() | map
   def payment_gateway(type) do
     Enum.find(payment_gateways(), &(&1[:type] == type))
   end
@@ -53,7 +53,7 @@ defmodule Ryal.Core do
 
   @spec fallback_gateways() :: list
   def fallback_gateways do
-    [_default|fallbacks] = payment_gateways()
+    [_default | fallbacks] = payment_gateways()
     fallbacks
   end
 
@@ -77,8 +77,8 @@ defmodule Ryal.Core do
   @spec user_table() :: module
   def user_table, do: @user_table
 
-  @spec start(atom, list) :: Supervisor.on_start
+  @spec start(atom, list) :: Supervisor.on_start()
   def start(:normal, []) do
-    Supervisor.start_link([], [strategy: :one_for_one, name: Ryal.Supervisor])
+    Supervisor.start_link([], strategy: :one_for_one, name: Ryal.Supervisor)
   end
 end

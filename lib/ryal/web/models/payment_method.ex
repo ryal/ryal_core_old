@@ -68,7 +68,7 @@ defmodule Ryal.PaymentMethod do
   # Loads up the module for the payment method type and then applies it to the
   # proxy column. This struct carries the module name and the data carried over.
   defp set_module_type(%{type: type} = params) do
-    type = String.to_atom type
+    type = String.to_atom(type)
     proxy_data = Map.get(params, :proxy, %{})
     module_name = Core.payment_method(type)
     Map.put(params, :proxy, struct(module_name, proxy_data))

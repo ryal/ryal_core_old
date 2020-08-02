@@ -6,6 +6,6 @@ defmodule Ryal.Api.OrderController do
   alias Ryal.Order
 
   def index(conn, params) do
-    render_collection conn, params, Order
+    render_collection(conn, params, Order)
   end
 end

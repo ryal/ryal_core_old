@@ -12,9 +12,9 @@ defmodule Ryal.Base33Calculator do
   @doc "Makes a sequence of Base33 characters. "
   def generate_sequence(count \\ 9) do
     @characters
-    |> Enum.shuffle
+    |> Enum.shuffle()
     |> Enum.take(count)
-    |> Enum.join
+    |> Enum.join()
   end
 
   @doc """

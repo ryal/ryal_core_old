@@ -9,7 +9,7 @@ defmodule Ryal.UserCommandTest do
 
   describe ".create/1" do
     test "will create a user with payment gateway" do
-      changeset = Core.user_module.changeset(%User{email: "test@ryal.com"})
+      changeset = Core.user_module().changeset(%User{email: "test@ryal.com"})
 
       assert [] == Repo.all(User)
       assert [] == Repo.all(PaymentGateway)
@@ -23,38 +23,42 @@ defmodule Ryal.UserCommandTest do
 
   describe ".update/1" do
     setup do
-      {:ok, user} = %User{}
+      {:ok, user} =
+        %User{}
         |> User.changeset(%{email: "ryal@example.com"})
-        |> UserCommand.create
+        |> UserCommand.create()
 
       [user: user]
     end
 
     test "will update a user", %{user: user} do
-      {:ok, user} = user
+      {:ok, user} =
+        user
         |> User.changeset(%{email: "ryal@updated.com"})
-        |> UserCommand.update
+        |> UserCommand.update()
 
       assert user.email == "ryal@updated.com"
     end
 
     test "will update payment gateway data", %{user: user} do
-      process_list_before = Process.list
+      process_list_before = Process.list()
 
-      {:ok, _user} = user
+      {:ok, _user} =
+        user
         |> User.changeset(%{email: "ryal@updated.com"})
-        |> UserCommand.update
+        |> UserCommand.update()
 
-      pids = Process.list -- process_list_before
+      pids = Process.list() -- process_list_before
       assert Enum.count(pids) >= 1
     end
   end
 
   describe ".delete/1" do
     setup do
-      {:ok, user} = %User{}
+      {:ok, user} =
+        %User{}
         |> User.changeset(%{email: "ryal@example.com"})
-        |> UserCommand.create
+        |> UserCommand.create()
 
       [user: user]
     end
@@ -63,7 +67,7 @@ defmodule Ryal.UserCommandTest do
       {:ok, _} = UserCommand.delete(user)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Repo.get!(Core.user_module, user.id)
+        Repo.get!(Core.user_module(), user.id)
       end
     end
   end
